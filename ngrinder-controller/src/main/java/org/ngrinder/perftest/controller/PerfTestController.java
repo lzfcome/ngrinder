@@ -17,10 +17,8 @@ import static org.ngrinder.common.util.Preconditions.checkArgument;
 import static org.ngrinder.common.util.Preconditions.checkNotEmpty;
 import static org.ngrinder.common.util.Preconditions.checkNotNull;
 import static org.ngrinder.common.util.Preconditions.checkState;
-import static org.ngrinder.common.util.Preconditions.checkValidURL;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +43,7 @@ import org.ngrinder.common.controller.NGrinderBaseController;
 import org.ngrinder.common.exception.NGrinderRuntimeException;
 import org.ngrinder.common.util.DateUtil;
 import org.ngrinder.common.util.FileDownloadUtil;
+import org.ngrinder.home.model.QuickStartEntity;
 import org.ngrinder.infra.config.Config;
 import org.ngrinder.infra.spring.RemainedPath;
 import org.ngrinder.model.PerfTest;
@@ -247,15 +246,14 @@ public class PerfTestController extends NGrinderBaseController {
 	 * @return "perftest/detail"
 	 */
 	@RequestMapping("/quickStart")
-	public String getQuickStart(User user, @RequestParam(value = "url", required = true) String urlString,
-					ModelMap model) {
-		URL url = checkValidURL(urlString);
+	public String getQuickStart(User user, QuickStartEntity quickStart, ModelMap model) {
+		String host = quickStart.getHostString();
 		List<FileEntry> scriptList = new ArrayList<FileEntry>();
-		FileEntry newEntry = fileEntryService.prepareNewEntryForQuickTest(user, urlString);
+		FileEntry newEntry = fileEntryService.prepareNewEntryForQuickTest(user, quickStart);
 		scriptList.add(checkNotNull(newEntry, "Create quick test script ERROR!"));
 		model.addAttribute(PARAM_QUICK_SCRIPT, newEntry.getPath());
-		model.addAttribute("testName", "Test for " + url.getHost());
-		model.addAttribute(PARAM_TARGET_HOST, url.getHost());
+		model.addAttribute("testName", "Test for " + host);
+		model.addAttribute(PARAM_TARGET_HOST, host);
 		model.addAttribute(PARAM_SCRIPT_LIST, scriptList);
 		model.addAttribute(PARAM_REGION_AGENT_COUNT_MAP, agentManagerService.getUserAvailableAgentCountMap(user));
 		model.addAttribute(PARAM_PROCESSTHREAD_POLICY_SCRIPT, perfTestService.getProcessAndThreadPolicyScript());

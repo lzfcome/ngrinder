@@ -10,9 +10,38 @@
 				height: 200px;
 				padding: 0
 			}    
+			.testType {
+				padding-left: 20px;
+				padding-top: 20px;
+				font-size: 12px;
+				font-weight: bold
+			}
+			.testType label {
+				color: white;
+				font-weight: bold
+			}
+			.title {
+				color: white;
+				font-size: 20px;
+				font-weight: bold
+			}
 			.quickStart {
+				padding-left: 20px;
+				padding-top: 5px
+			}
+			.description {
 				padding-left: 160px;
-				padding-top: 35px
+				padding-top: 5px
+			}
+			.description label {
+				color: white
+			}
+			.detail {
+				padding-left: 140px;
+				padding-top: 10px
+			}
+			.detail label {
+				color: white
 			}
 			.table {
 				margin-bottom: 5px
@@ -26,9 +55,54 @@
 	<div class="container">
 		<div class="hero-unit"/>	
 			<form class="form-inline" name="quickStart" id="quickStart" action="${req.getContextPath()}/perftest/quickStart" method="POST">
+				<div class="testType">
+					<label class="title">Test Type</label>
+					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<label > <input type="radio" id="httpRadio" name="testType" checked value="http"> HTTP/HTTPS</label>
+					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<label > <input type="radio" id="jdbcRadio" name="testType" value="jdbc"> JDBC</label>
+				</div>
 				<div class="quickStart" data-original-title="<@spring.message "home.tip.url.title"/>" data-content="<@spring.message "home.tip.url.content"/>" data-placement="bottom" rel="popover">
-					<input type="text" name="url" id="url" class="span7 url_ex required" placeholder="<@spring.message "home.placeholder.url"/>"/> 
+					<label class="title">Quick Start</label>
+					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<input type="text" name="url" id="url" class="span7 url required" placeholder="<@spring.message "home.placeholder.url"/>"/> 
 					<button id="startTestBtn" class="btn btn-primary" ><@spring.message "home.button.startTest"/></button>
+				</div>
+				<div id="description" class="description" style="display:none">
+					<label>Type the URL to which you run performance test</label><br>
+					<table width=400 style="border-top:1px solid white" cellspacing=0 cellpadding=2><tr><td></td></tr></table>
+					<label>Open source Performance Testing Solution</label><br>
+					<label>-based on the power of grinder</label><br>
+					<label>-nGrinder helps you to visualize your web-site performance</label>
+				</div>
+				<div id="detail" class="detail" style="display:none">
+					<div class="span3">
+						<div class="row">
+							<div class="span1">
+								<label>Version</label><br>
+								<label>Account</label><br>
+								<label>Password</label><br>
+							</div>
+							<div class="span2">
+								<select class="select-item" id="version" name="version" style="width:140px" class="required">
+								</select><br>
+								<input type="text" name="account" id="account" class="span2 required" style="height:14px"/> <br>
+								<input type="text" name="password" id="Password" class="span2 required" style="height:14px"/> <br>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<label>Test Content</label>
+						<select class="select-item" id="testContent" name="testContent">
+							<option value ="select">Select</option>
+							<option value ="insert">Insert</option>
+							<option value="update">Update</option>
+							<option value="delete">Delete</option>
+						</select><br>
+						<label>The <b><a href="#">DATA</a></b> to be prepared.</label><br>
+						<label>Before the test, you need to prepare the data, and import the data  into the database.</label><br>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -107,6 +181,14 @@
 	</div>
 	<script>
 		$(document).ready(function(){
+			initTestType();
+			initDriver();
+			jQuery.validator.addMethod("jdbc", function(value, element) {
+			    var length = value.length;
+			    var jdbc =  /(^jdbc:(cubrid)|(mysql)|(oracle):).+[\.\w\d]+:\d+.+$/
+			    return this.optional(element) || (jdbc.test(value));
+			}, "JDBC connection string is error.");
+			
 			$.validator.addMethod('url_ex',
 				    function (value) { 
 				        return /^((https?|ftp):\/\/)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
@@ -116,7 +198,7 @@
 			$("#startTestBtn").click(function() {
 				if ($("#url").valid()) {
 					var urlValue = $("#url").val();
-					if (!urlValue.match("^(http|ftp)")) {
+					if (!urlValue.match("^(http|ftp|jdbc)")) {
 						$("#url").val("http://" + urlValue);
 					}
 					$("#quickStart").submit();
@@ -136,7 +218,64 @@
 		    		$("div.quickStart").popover("hide");
 		    	}
 		    });
+		    
+		    $("#url").blur(function() {
+		    	initDriver();
+		    });
+		    
+		    $("#httpRadio, #jdbcRadio").change(function() {
+				changeEvent();
+			});
 	    });
+		
+	    var driver = [];
+	    driver["cubrid"] = ["9.0.0", "8.4.3", "8.4.1", "8.4.0", "8.3.1", "8.3.0", "8.2.2"];
+	    driver["mysql"] = ["5.1.22", "5.1.9"];
+	    driver["oracle"] = ["11g", "10g"];
+	    function initDriver(){
+	    	var url = $("#url").val();
+		    var db = url.replace(/(^jdbc:)|(:.+$)/g, "");
+		    $("#version").empty();
+		    $("#version").append(getDirver(db));
+	    }
+	    function getDirver(db) {
+			var contents = [];
+			if(!driver[db]){
+				//alert("Do not support the database type: " + db);
+				return;
+			}
+			var ver;
+			for(ver in driver[db]){
+				contents.push("<option value='" + driver[db][ver] + "'>" + driver[db][ver] + "</option>");
+			}
+			return contents.join("\n");
+		}
+	    
+	    function changeEvent() {
+	    	initTestType();
+	    }
+	    
+	    function initTestType() {
+	    	if ($("#httpRadio").attr("checked") == "checked") {
+				$("#detail").hide();
+				$("#description").show();
+				//$("#description").toggle(500);
+				
+				$("#url").addClass("url");
+				$("#url").removeClass("jdbc");
+				
+				$("div.quickStart").attr("data-content","<@spring.message "home.tip.url.content"/>");
+			}else if ($("#jdbcRadio").attr("checked") == "checked") {
+				$("#description").hide();
+				$("#detail").show();
+				//$("#detail").toggle(500);
+				
+				$("#url").addClass("jdbc");
+				$("#url").removeClass("url"); 
+				
+				$("div.quickStart").attr("data-content","URL should start with jdbc:");
+			}
+	    }
 	</script>
 	</body>
 </html>

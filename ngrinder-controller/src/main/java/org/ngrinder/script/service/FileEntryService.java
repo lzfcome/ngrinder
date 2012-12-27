@@ -32,6 +32,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ngrinder.common.exception.NGrinderRuntimeException;
 import org.ngrinder.common.util.HttpContainerContext;
+import org.ngrinder.home.model.QuickStartEntity;
 import org.ngrinder.infra.config.Config;
 import org.ngrinder.model.User;
 import org.ngrinder.script.model.FileEntry;
@@ -61,8 +62,8 @@ import freemarker.template.Template;
 /**
  * File entry service class.<br/>
  * 
- * This class is responsible for creating user svn repository whenever a user is created and connect
- * the user to the underlying svn.
+ * This class is responsible for creating user svn repository whenever a user is
+ * created and connect the user to the underlying svn.
  * 
  * @author JunHo Yoon
  * @since 3.0
@@ -144,8 +145,8 @@ public class FileEntryService {
 	}
 
 	/**
-	 * Get all {@link FileEntry} for the given user. This method is subject to be cached because it
-	 * takes time.
+	 * Get all {@link FileEntry} for the given user. This method is subject to
+	 * be cached because it takes time.
 	 * 
 	 * @param user
 	 *            user
@@ -348,16 +349,20 @@ public class FileEntryService {
 	 *            url to be tested.
 	 * @return created new {@link FileEntry}
 	 */
-	public FileEntry prepareNewEntryForQuickTest(User user, String urlString) {
-		String testNameFromUrl = getTestNameFromUrl(urlString);
-		// addFolder(user, "", testNameFromUrl);
-		// There might be race condition here... What if a user changes the SVN
-		// repo while saving
-		// newEntry??
-		FileEntry newEntry = prepareNewEntry(user, testNameFromUrl, "script.py", urlString);
-		newEntry.setDescription("Quick test for " + urlString);
+	public FileEntry prepareNewEntryForQuickTest(User user, QuickStartEntity quickStart) {
+		FileEntry newEntry = null;
+		FileEntry libEntry = null;
+		try {
+			newEntry = quickStart.prepareScriptEntry(user);
+			libEntry = quickStart.prepareLibEntry();
+		} catch (Exception e) {
+			LOG.error("Error while fetching template for quick start", e);
+		}
 		save(user, newEntry);
-		return getFileEntry(user, testNameFromUrl + "/" + "script.py");
+		if (libEntry != null) {
+			save(user, libEntry);
+		}
+		return getFileEntry(user, newEntry.getPath());
 	}
 
 	/**
@@ -423,8 +428,8 @@ public class FileEntryService {
 	}
 
 	/**
-	 * Get Lib and Resources. This method will collect the files of lib and resources folder on the
-	 * same folder whre script is located.
+	 * Get Lib and Resources. This method will collect the files of lib and
+	 * resources folder on the same folder whre script is located.
 	 * 
 	 * @param user
 	 *            user
