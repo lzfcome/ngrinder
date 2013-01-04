@@ -56,7 +56,7 @@
 		<div class="hero-unit"/>	
 			<form class="form-inline" name="quickStart" id="quickStart" action="${req.getContextPath()}/perftest/quickStart" method="POST">
 				<div class="testType">
-					<label class="title">Test Type</label>
+					<label class="title"><@spring.message "home.test.type"/></label>
 					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 					<label > <input type="radio" id="httpRadio" name="testType" checked value="http"> HTTP/HTTPS</label>
@@ -64,25 +64,25 @@
 					<label > <input type="radio" id="jdbcRadio" name="testType" value="jdbc"> JDBC</label>
 				</div>
 				<div class="quickStart" data-original-title="<@spring.message "home.tip.url.title"/>" data-content="<@spring.message "home.tip.url.content"/>" data-placement="bottom" rel="popover">
-					<label class="title">Quick Start</label>
+					<label class="title"><@spring.message "home.quick.start"/></label>
 					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 					<input type="text" name="url" id="url" class="span7 url required" placeholder="<@spring.message "home.placeholder.url"/>"/> 
 					<button id="startTestBtn" class="btn btn-primary" ><@spring.message "home.button.startTest"/></button>
 				</div>
 				<div id="description" class="description" style="display:none">
-					<label>Type the URL to which you run performance test</label><br>
+					<label><@spring.message "home.descript1"/></label><br>
 					<table width=400 style="border-top:1px solid white" cellspacing=0 cellpadding=2><tr><td></td></tr></table>
-					<label>Open source Performance Testing Solution</label><br>
-					<label>-based on the power of grinder</label><br>
-					<label>-nGrinder helps you to visualize your web-site performance</label>
+					<label><@spring.message "home.descript2"/></label><br>
+					<label><@spring.message "home.descript3"/></label><br>
+					<label><@spring.message "home.descript4"/></label>
 				</div>
 				<div id="detail" class="detail" style="display:none">
 					<div class="span3">
 						<div class="row">
 							<div class="span1">
-								<label>Version</label><br>
-								<label>Account</label><br>
-								<label>Password</label><br>
+								<label><@spring.message "home.version"/></label><br>
+								<label><@spring.message "home.account"/></label><br>
+								<label><@spring.message "home.password"/></label><br>
 							</div>
 							<div class="span2">
 								<select class="select-item" id="version" name="version" style="width:140px" class="required">
@@ -93,15 +93,15 @@
 						</div>
 					</div>
 					<div class="span4">
-						<label>Test Content</label>
+						<label><@spring.message "home.test.content"/></label>
 						<select class="select-item" id="testContent" name="testContent">
 							<option value ="select">Select</option>
 							<option value ="insert">Insert</option>
 							<option value="update">Update</option>
 							<option value="delete">Delete</option>
 						</select><br>
-						<label>The <b><a href="#">DATA</a></b> to be prepared.</label><br>
-						<label>Before the test, you need to prepare the data, and import the data  into the database.</label><br>
+						<label><@spring.message "home.test.data1"/></label><br>
+						<label><@spring.message "home.test.data2"/></label><br>
 					</div>
 				</div>
 			</form>
@@ -273,7 +273,7 @@
 				$("#url").addClass("jdbc");
 				$("#url").removeClass("url"); 
 				
-				$("div.quickStart").attr("data-content","URL should start with jdbc:");
+				$("div.quickStart").attr("data-content","<@spring.message "home.tip.url.jdbc.content"/>");
 			}
 	    }
 	</script>

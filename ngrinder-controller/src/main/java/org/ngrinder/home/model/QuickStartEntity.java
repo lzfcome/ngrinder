@@ -35,7 +35,7 @@ public class QuickStartEntity {
 
 	private static final Map<String, Map<String, String>> JDBC_VERSION = new HashMap<String, Map<String, String>>();
 	static {
-		// The driver list can be obtained from an external address,
+		// TODO The driver list can be obtained from an external address,
 		// and available for download.
 		// So that we can remove the following code.
 		Map<String, String> cubrid = new HashMap<String, String>() {
