@@ -9,8 +9,11 @@ from java.sql import DriverManager
 from net.grinder.script.Grinder import grinder
 from net.grinder.script import Test
 from ${driverPath} import ${jdbcDriver}
+from java.util import Random
+from java.lang import System
  
 test1 = Test(1, "Database insert")
+random = Random(long(System.nanoTime()))
  
 # Load the JDBC driver.
 DriverManager.registerDriver(${jdbcDriver}())
@@ -30,24 +33,22 @@ statement = connection.createStatement()
 try: statement.execute("drop table ngrinder_insert_temp")
 except: pass
  
-statement.execute("create table ngrinder_insert_temp(thread integer, run integer)")
+statement.execute("create table ngrinder_insert_temp(test_id integer, test_number integer)")
  
 ensureClosed(statement)
 # ensureClosed(connection)
  
 class TestRunner:
     def __call__(self):
-        connection = None
         insertStatement = None
  
         try:
             insertStatement = connection.createStatement()
- 
+            tmpId = random.nextInt(1024)
+            tmpNumber = random.nextInt(1024)
             insertStatement = test1.wrap(insertStatement)
-            insertStatement.execute("insert into ngrinder_insert_temp values(%d, %d)" %
-                                    (grinder.threadNumber, grinder.runNumber))
+            insertStatement.execute("insert into ngrinder_insert_temp values(%d, %d)" % (tmpId, tmpNumber))
  
 
         finally:
             ensureClosed(insertStatement)
-            ensureClosed(connection)

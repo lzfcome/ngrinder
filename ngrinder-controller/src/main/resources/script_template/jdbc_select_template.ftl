@@ -9,8 +9,11 @@ from java.sql import DriverManager
 from net.grinder.script.Grinder import grinder
 from net.grinder.script import Test
 from ${driverPath} import ${jdbcDriver}
+from java.util import Random
+from java.lang import System
  
 test1 = Test(1, "Database select")
+random = Random(long(System.nanoTime()))
  
 # Load the JDBC driver.
 DriverManager.registerDriver(${jdbcDriver}())
@@ -28,24 +31,21 @@ connection = getConnection()
 # statement = connection.createStatement()
  
 # You must ensure that the table and records already exist in the database.
-# statement.execute("create table ngrinder_select_temp(thread integer, run integer)")
+# statement.execute("create table ngrinder_select_temp(test_id integer, test_number integer)")
  
 # ensureClosed(statement)
 # ensureClosed(connection)
  
 class TestRunner:
     def __call__(self):
-        connection = None
         selectStatement = None
  
         try:
             selectStatement = connection.createStatement()
- 
+            tmpId = random.nextInt(1024)
             # test1.record(selectStatement)
             selectStatement = test1.wrap(selectStatement)
-            selectStatement.execute("select * from ngrinder_select_temp where thread=%d" %
-                                   grinder.threadNumber)
+            selectStatement.execute("select * from ngrinder_select_temp where test_id=%d" % tmpId)
 
         finally:
             ensureClosed(selectStatement)
-            ensureClosed(connection)
