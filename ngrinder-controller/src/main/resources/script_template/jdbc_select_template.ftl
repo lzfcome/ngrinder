@@ -25,13 +25,13 @@ def ensureClosed(object):
  
 # One time initialisation that cleans out old data.
 connection = getConnection()
-statement = connection.createStatement()
+# statement = connection.createStatement()
  
 # You must ensure that the table and records already exist in the database.
 # statement.execute("create table ngrinder_select_temp(thread integer, run integer)")
  
-ensureClosed(statement)
-ensureClosed(connection)
+# ensureClosed(statement)
+# ensureClosed(connection)
  
 class TestRunner:
     def __call__(self):
@@ -39,11 +39,10 @@ class TestRunner:
         selectStatement = None
  
         try:
-            connection = getConnection()
             selectStatement = connection.createStatement()
  
             # test1.record(selectStatement)
-            insertStatement = test1.wrap(insertStatement)
+            selectStatement = test1.wrap(selectStatement)
             selectStatement.execute("select * from ngrinder_select_temp where thread=%d" %
                                    grinder.threadNumber)
 

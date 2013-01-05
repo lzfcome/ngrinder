@@ -181,7 +181,7 @@ public class QuickStartEntity {
 		private String urlHost;
 
 		JDBCScript() {
-			// cubrid--->jdbc:cubrid:10.34.64.220:33000/db0001:::?charSet=utf8
+			// cubrid--->jdbc:cubrid:10.34.64.220:33000:db0001:::?charSet=utf8
 			urlHost = url.replaceAll("(^jdbc:[\\w\\d\\-]+:((thin:@)|(Tds:)|(sqlserver:))?(//)?)|(:\\d+.+$)", "");
 			dbType = url.replaceAll("(^jdbc:)|(:.+$)", "");
 			driver = JDBC_VERSION.get(dbType).toString();

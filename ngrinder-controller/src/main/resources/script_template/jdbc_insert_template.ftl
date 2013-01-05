@@ -33,7 +33,7 @@ except: pass
 statement.execute("create table ngrinder_insert_temp(thread integer, run integer)")
  
 ensureClosed(statement)
-ensureClosed(connection)
+# ensureClosed(connection)
  
 class TestRunner:
     def __call__(self):
@@ -41,7 +41,6 @@ class TestRunner:
         insertStatement = None
  
         try:
-            connection = getConnection()
             insertStatement = connection.createStatement()
  
             insertStatement = test1.wrap(insertStatement)
