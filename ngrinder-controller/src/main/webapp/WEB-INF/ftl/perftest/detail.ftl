@@ -436,10 +436,6 @@ function initScheduleDate() {
 }
 
 function initDuration() {
-	var durationVal = $("#duration").val();
-	var durationHour = parseInt(durationVal / 3600000) + 1;
-	var durationMaxHour =  durationHour > ${maxRunHour} ? durationHour : ${maxRunHour};
-	
 	var sliderMax = 1000;
 	durationMap[0] = 0;
 	
@@ -461,12 +457,14 @@ function initDuration() {
 		} else {
 			durationMap[i] = durationMap[i - 1] + 60 * 24;
 		}
-		if ((durationMap[i]/60) >= durationMaxHour) {
+		if ((durationMap[i]/60) >= ${maxRunHour}) {
 			 sliderMax = i;
-		     durationMap[i] = (durationMaxHour - 1) * 60;
+		     durationMap[i] = (${maxRunHour} - 1) * 60;
 		     break;
 		}
 	}
+	
+	var durationVal = $("#duration").val();
 	$("#hiddenDurationInput").attr("data-slider", "#durationSlider");
 	$("#hiddenDurationInput").slider({min:1, max:sliderMax});
 	for ( var i = 0; i <= sliderMax; i++) {
@@ -476,6 +474,8 @@ function initDuration() {
 		}
 	}
 	
+	var durationHour = parseInt(durationVal / 3600000) + 1;
+	var durationMaxHour = durationHour > ${maxRunHour} ? durationHour : ${maxRunHour};
 	$("#hSelect").append(getOption(durationMaxHour));
 	$("#hSelect").change(getDurationMS);
 	
@@ -486,6 +486,7 @@ function initDuration() {
 	$("#sSelect").change(getDurationMS);
 	
 	setDuration();
+	setDurationHour(durationVal);
 }
 
 var validationOptions = {};
@@ -541,8 +542,7 @@ function addValidation() {
 			},				
 			runCount: {
 				digits: true,
-				max: ${maxRunCount},
-				min: 0
+				max: ${maxRunCount}
 			}
 		},
 	    messages: { 
@@ -624,8 +624,20 @@ function bindEvent() {
 		$(this).popover('show');
 	});
 	
-	$("#scriptName").change(function(selected) {
-		$("#showScript").val(selected);
+	$("#scriptName").change(function() {
+		var $this = $(this);
+		var $showScript = $("#showScript");
+		var $scriptRevision = $("#scriptRevision");
+		var oldRevision = $scriptRevision.attr("oldRevision");
+		if ($this.val() == $this.attr("oldScript") && oldRevision != -1) {
+			$showScript.text("R " + oldRevision);
+			$scriptRevision.val(oldRevision);
+		} else {
+			$showScript.text("R HEAD");
+			$scriptRevision.val(-1);
+		}
+		$showScript.show();
+		
 		updateScriptResources(false);
 	});
 	
@@ -645,7 +657,7 @@ function bindEvent() {
 		$("#agentCount").rules("add", {
 			min:1
 		});
-
+		
 		if (!validateForm()) {
 			return false;
 		}
@@ -722,41 +734,42 @@ function bindEvent() {
 	$("#runCountRadio").click(function() {
 		if ($(this).attr("checked") == "checked") {
 			var $runCnt = $("#runCount");
-			$runCnt.addClass("required");
-			$runCnt.addClass("positiveNumber");
+			$runCnt.rules("add", {
+				min:1
+			});
 			$runCnt.valid();
 
 			var $durationHour = $("#durationHour");
-			$durationHour.val(0);
-			$("#durationHour").valid();
-			var $duration = $("#duration");
-			$duration.removeClass("positiveNumber");
-			$duration.valid();
+			if (!$durationHour.valid()) {
+				var maxVal = ${maxRunHour} * 3600000;
+				$("#duration").val(maxVal);
+				setDuration();
+				setDurationHour(maxVal);
+			}
+			$durationHour.valid();
 		}
 	});
 	
 	$("#durationRadio").click(function() {
 		if ($(this).attr("checked") == "checked") {
-			var duration = $("#duration").val();
-			var durationHour = parseInt(duration / 3600000);
-			if (duration > ${maxRunHour} * 3600000) {
-				durationHour += 1;
-			}
-			var $durationHour = $("#durationHour");
-			$durationHour.val(durationHour);
-			$durationHour.valid();
+			setDurationHour($("#duration").val());
+			$("#durationHour").valid();
 			var $duration = $("#duration");
 			$duration.addClass("positiveNumber");
 			$duration.valid();
 			
 			var $runCnt = $("#runCount");
-			$runCnt.removeClass("required");
-			$runCnt.removeClass("positiveNumber");
+			$runCnt.rules("add", {
+				min:0
+			});
+			if (!$runCnt.valid()) {
+				$runCnt.val(0);
+			}
 			$runCnt.valid();
 		}
 	});
 	
-	$("#ignoreSampleCount").blur(function() {
+	$("#ignoreSampleCount, #runCount").blur(function() {
 		if ($.trim($(this).val()) == "") {
 			$(this).val(0);
 		}
@@ -820,7 +833,7 @@ function bindEvent() {
 		$("#processAndThreadPanel").toggle();
 	});
 	
-	$("#hSelect, #mSelect, sSelect").change(function() {
+	$("#hSelect, #mSelect, #sSelect").change(function() {
 		$("#durationRadio").click();
 	});
 	
@@ -832,12 +845,11 @@ function bindEvent() {
 	var $regionSelect = $("#regionSelect");
 	$regionSelect.select2();
 	$regionSelect.change(function(){
-		var region = $(this).val();
-		changeAgentMaxCount(region);
+		changeAgentMaxCount($(this).val(), true);
 	});
-	changeAgentMaxCount($regionSelect.val());
+	changeAgentMaxCount($regionSelect.val(), false);
 <#else>
-	changeAgentMaxCount("NONE");
+	changeAgentMaxCount("NONE", false);
 </#if>	
 }
 var agentCountMap = {};
@@ -845,7 +857,7 @@ var agentCountMap = {};
 agentCountMap["${key}"] = ${regionAgentCountMap[key]};
 </#list>
 
-function changeAgentMaxCount(region) {
+function changeAgentMaxCount(region, isValid) {
 	var count = agentCountMap[region];
 	if (count === undefined) {
 		count = 0;
@@ -854,9 +866,12 @@ function changeAgentMaxCount(region) {
 
 	var $agentCountObj = $("#agentCount");
 	$agentCountObj.rules("add", {
-		max:count
+		max: count
 	});
-	$agentCountObj.valid();
+	
+	if (isValid) {
+		$agentCountObj.valid();
+	}
 }
 
 function validateForm() {
@@ -991,7 +1006,6 @@ function getOption(cnt) {
 function openReportDiv(onFinishHook) {
 	$("#reportContent").load("${req.getContextPath()}/perftest/loadReportDiv?testId=" + $("#testId").val() + "&imgWidth=600",
 		function() {
-			drawChart('TPS', 'tpsDiv', $("#tpsData").val());
 			if (onFinishHook !== undefined) {
 				onFinishHook();
 			}
@@ -1084,6 +1098,11 @@ function initScheduleTime() {
 	$("#smSelect").val(date.getMinutes());
 }
 
+function setDurationHour(durationVal) {
+	var durationHour = parseInt(durationVal / 3600000);
+	durationHour = durationVal % 3600000 == 0 ? durationHour : durationHour + 1;
+	$("#durationHour").val(durationHour);
+}
 </script>
 	</body>
 </html>

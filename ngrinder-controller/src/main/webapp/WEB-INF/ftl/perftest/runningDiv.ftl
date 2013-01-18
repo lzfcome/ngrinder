@@ -6,18 +6,18 @@
 		<div class="form-horizontal form-horizontal-3" style="margin-top: 10px;">
 			<fieldset>
 				<div class="control-group">
-					<label for="scriptName" class="control-label"><@spring.message "perfTest.testRunning.scriptName"/></label>
+					<label class="control-label"><@spring.message "perfTest.testRunning.scriptName"/></label>
 					<div class="controls" title="${(test.scriptName)!}">${(test.scriptNameInShort)!}</div> 
 				</div>
 				<hr>
 				<div class="control-group">
-					<label for="vuserPerAgent" class="control-label"><@spring.message "perfTest.testRunning.vusers"/></label>
+					<label class="control-label"><@spring.message "perfTest.testRunning.vusers"/></label>
 					<div class="controls">
 						<strong>${(test.vuserPerAgent)!}</strong>
 					</div>
 				</div>
 				<div class="control-group">
-					<label for="agentCount" class="control-label"><@spring.message "perfTest.testRunning.agents"/></label>
+					<label class="control-label"><@spring.message "perfTest.testRunning.agents"/></label>
 					<div class="controls">
 						<span>${(test.agentCount)!}</span>
 						<!--<a class="btn btn-mini btn-info" id="agentInfoBtn" href="#agentListModal" data-toggle="modal">Info</a>-->
@@ -66,13 +66,13 @@
 					</#if>
 				</div>
 				<div class="control-group">
-					<label for="ignoreSampleCount" class="control-label"><@spring.message "perfTest.configuration.ignoreSampleCount"/> </label>
+					<label class="control-label"><@spring.message "perfTest.configuration.ignoreSampleCount"/> </label>
 					<div class="controls">
 						<span>${(test.ignoreSampleCount)!0}</span> 
 					</div>
 				</div>
 				<div class="control-group">
-					<label for="agentStatus" class="control-label">Agent Status</label>
+					<label class="control-label">Agent Status</label>
 				</div>
 				<div class="control-group">
 					<div id="agent_status">
@@ -182,7 +182,7 @@
 					$("#process_data").text(curRunningProcesses);
 					$("#thread_data").text(curRunningThreads);
 					$("#running_count").text(curRunningCount);
-					var agentStatusString = "";
+					var agentStatusString = "<ul>";
 					for ( var i = 0; i < curAgentPerfStates.length; i++) {
 						var eachAgent = curAgentPerfStates[i];
 						if (agentPerfStates[eachAgent.agent] === undefined) {
@@ -191,10 +191,12 @@
 						agentPerfStates[eachAgent.agent].cpu = eachAgent.cpu;
 						agentPerfStates[eachAgent.agent].mem = eachAgent.mem;
 						// Use sparkle line...     
-						agentStatusString = curAgentPerfStates[i].agent + " CPU - "
-							+ curAgentPerfStates[i].cpu + "%   MEM - "
-							+ curAgentPerfStates[i].mem + "%";
+						agentStatusString = agentStatusString
+								+ "<li>" + curAgentPerfStates[i].agent + " CPU - "
+								+ curAgentPerfStates[i].cpu + "%   MEM - "
+								+ curAgentPerfStates[i].mem + "%</li>";
 					}
+					agentStatusString += "</ul>"; 
 					$("#agent_status").html(agentStatusString);
 					peakTps = curPeakTps;
 					test_tps_data.enQueue(curTps);

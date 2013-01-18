@@ -21,6 +21,7 @@ import static org.ngrinder.common.util.Preconditions.checkState;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -363,7 +364,13 @@ public class PerfTestController extends NGrinderBaseController {
 		for (String each : numbers) {
 			id[i++] = NumberUtils.toLong(each, 0);
 		}
-		List<PerfTest> perfTests = perfTestService.getPerfTest(user, id);
+		
+		List<PerfTest> perfTests = null;
+		if (StringUtils.isNotEmpty(ids)) {
+			perfTests = perfTestService.getPerfTest(user, id);
+		} else {
+			perfTests = Collections.emptyList();
+		}
 		List<Map<String, Object>> statusList = new ArrayList<Map<String, Object>>();
 		for (PerfTest each : perfTests) {
 			Map<String, Object> rtnMap = new HashMap<String, Object>(3);
@@ -479,9 +486,8 @@ public class PerfTestController extends NGrinderBaseController {
 	 */
 	@RequestMapping(value = "/getReportData")
 	@ResponseBody
-	public String getReportData(User user, ModelMap model, @RequestParam long testId,
+	public String getReportData(ModelMap model, @RequestParam long testId,
 					@RequestParam(required = true, defaultValue = "") String dataType, @RequestParam int imgWidth) {
-		getPerfTestWithPermissionCheck(user, testId, false);
 		String[] dataTypes = StringUtils.split(dataType, ",");
 		Map<String, Object> rtnMap = new HashMap<String, Object>(1 + dataTypes.length);
 		if (dataTypes.length <= 0) {
@@ -616,8 +622,8 @@ public class PerfTestController extends NGrinderBaseController {
 	 * @return "perftest/report"
 	 */
 	@RequestMapping(value = "/report")
-	public String getReport(User user, ModelMap model, @RequestParam long testId) {
-		model.addAttribute("test", getPerfTestWithPermissionCheck(user, testId, false));
+	public String getReport(ModelMap model, @RequestParam long testId) {
+		model.addAttribute("test", perfTestService.getPerfTest(testId));
 		return "perftest/report";
 	}
 

@@ -15,6 +15,7 @@ package org.ngrinder.script.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -279,9 +280,10 @@ public class FileEntryController extends NGrinderBaseController {
 						new Predicate<FileEntry>() {
 							@Override
 							public boolean apply(FileEntry input) {
-								return input.getPath().contains(query);
+								return StringUtils.containsIgnoreCase(new File(input.getPath()).getName(), query.trim());
 							}
 						});
+		model.addAttribute("query", query);
 		model.addAttribute("files", searchResult);
 		model.addAttribute("currentPath", "");
 		return "script/scriptList";

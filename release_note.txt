@@ -1,3 +1,41 @@
+3.1.0 (2013.01.07)
+
+We're proudly releasing nGrinder 3.1 targeting the large organization. 
+With some bug fix, the following improvements are for the effective operations of nGrinder.      
+
+- Main features and change:
+  * Support multiple region. User now can select one of multiple network regions to choose the agents depending on the test target location. 
+    All controllers in regions need to use a directory on network file system for controllers’ home directory.
+    - See http://www.cubrid.org/wiki_ngrinder/entry/controller-clustering-guide
+  * Share user accounts. Now a user can share his permission to other users. Then the other user can start/check test with his rights.
+    - http://www.cubrid.org/wiki_ngrinder/entry/user-permission
+  * Modified monitoring function to not to use DB to save monitor data. Now the monitor data will be saved in a data file of the test directory.
+  * Enable the super user role. Super user can check all user's tests and scripts without the permission for system configuration.
+  * Enhance the default process and thread count calculation.  process count is configured in the much better way.
+    - See http://www.cubrid.org/wiki_ngrinder/entry/advanced-controller-configuration
+  * Add dynamic system configuration. You don't need to restart the server for the most of configuration changes.
+    - See http://www.cubrid.org/wiki_ngrinder/entry/advanced-controller-configuration
+  * Make agent much stable by providing the appropriate memory size (Reducing OOM)
+	- See http://www.cubrid.org/wiki_ngrinder/entry/agent-configuration-guide
+  * Add "Mean time to first byte" chart in the detailed report. 
+  * Change the license from BDS to Apache 2.0 
+  
+- Minor improvement
+  * Support CUBRID HA to remove the single of point failure. Make it stable as much as possible.
+    - See http://www.cubrid.org/wiki_ngrinder/entry/advanced-controller-configuration
+  * Support SHA256 password encoding depending on the configuration. Secure your account with the better password encoding. 
+    - See http://www.cubrid.org/wiki_ngrinder/entry/advanced-controller-configuration
+  * Support the custom help site. Make your own site to help people.
+    - See http://www.cubrid.org/wiki_ngrinder/entry/advanced-controller-configuration
+
+
+3.0.4 (2012.12.04)
+- Hot fix for nGrinder 3.0
+- Managing files using SVN Clients is now working.
+
+Bug
+[NGRINDER-385] - Managing files using SVN client is not working
+
 3.0.3 (2012.11.XX)
 - Hot fix for nGrinder 3.0
 - Mostly fix the bug which happens if there are more than 1000 tests.

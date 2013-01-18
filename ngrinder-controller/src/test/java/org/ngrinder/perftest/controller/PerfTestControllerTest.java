@@ -289,10 +289,10 @@ public class PerfTestControllerTest extends AbstractPerfTestTransactionalTest {
 		String testName = "test1";
 		PerfTest test = createPerfTest(testName, Status.FINISHED, new Date());
 		ModelMap model = new ModelMap();
-		controller.getReport(getTestUser(), model, test.getId());
+		controller.getReport(model, test.getId());
 
 		model.clear();
-		controller.getReportData(getTestUser(), model, test.getId(), "TPS,mean_time(ms)", 0);
+		controller.getReportData(model, test.getId(), "TPS,mean_time(ms)", 0);
 
 		model.clear();
 		controller.getReportDiv(getTestUser(), model, test.getId(), 700);
