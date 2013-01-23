@@ -10,16 +10,6 @@
 				height: 200px;
 				padding: 0
 			}    
-			.testType {
-				padding-left: 20px;
-				padding-top: 20px;
-				font-size: 12px;
-				font-weight: bold
-			}
-			.testType label {
-				color: white;
-				font-weight: bold
-			}
 			.title {
 				color: white;
 				font-size: 20px;
@@ -27,25 +17,28 @@
 			}
 			.quickStart {
 				padding-left: 20px;
-				padding-top: 5px
+				padding-top: 30px
 			}
-			.description {
-				padding-left: 160px;
-				padding-top: 5px
-			}
-			.description label {
-				color: white
+			.quickStart label {
+				color: white;
+				font-weight: bold;
 			}
 			.detail {
-				padding-left: 140px;
+				padding-left: 135px;
 				padding-top: 10px
 			}
 			.detail label {
-				color: white
+				color: white;
+				font-weight: bold;
 			}
 			.table {
 				margin-bottom: 5px
-			} 
+			}
+			.error {
+				border-color: #B94A48;
+				color: #B94A48
+			}
+
 		</style> 
 		<script type="text/javascript">
 				</script>
@@ -54,52 +47,49 @@
 	<#include "common/navigator.ftl">
 	<div class="container">
 		<div class="hero-unit"/>	
-			<form class="form-inline" name="quickStart" id="quickStart" action="${req.getContextPath()}/perftest/quickStart" method="POST">
-				<div class="testType">
-					<label class="title"><@spring.message "home.test.type"/></label>
-					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					<label > <input type="radio" id="httpRadio" name="testType" checked value="http"> HTTP/HTTPS</label>
-					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					<label > <input type="radio" id="jdbcRadio" name="testType" value="jdbc"> JDBC</label>
-				</div>
-				<div class="quickStart" data-original-title="<@spring.message "home.tip.url.title"/>" data-content="<@spring.message "home.tip.url.content"/>" data-placement="bottom" rel="popover">
+			<form name="quickStart" id="quickStart" action="${req.getContextPath()}/perftest/quickStart" method="POST">
+				<input type="hidden" id="jdbcRadio" name="testType" value="jdbc">
+				<input type="hidden" name="url" id="url"/>
+				<div class="quickStart form-inline" data-original-title="Input valid JDBC connetion string" data-content="Input valid host and port." data-placement="bottom" rel="popover">
 					<label class="title"><@spring.message "home.quick.start"/></label>
 					<label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					<input type="text" name="url" id="url" class="span7 url required" placeholder="<@spring.message "home.placeholder.url"/>"/> 
+					<!-- jdbc:cubrid:10.34.64.220:33000:db0001:::?charSet=utf8 -->
+					<label>jdbc:cubrid:</label>
+					<input type="text" id="host" name="host" class="input-small host required span2" placeholder="host">
+					<label>:</label>
+  					<input type="text" id="port" name="port" class="input-small port required span1" placeholder="port">
+  					<label>:</label>
+  					<input type="text" id="dbname" name="dbname" class="input-small required span1" placeholder="db-name">
+  					<label>:</label>
+  					<input type="text" id="account" name="account" class="input-small required span1" placeholder="user-id">
+  					<label>:</label>
+  					<input type="password" id="password" name="password" class="input-small required span1" placeholder="password">
+  					<label>:</label><label>?charSet=</label>
+  					<input type="text" id="charset" name="charset" class="input-small required span1" placeholder="charset" value="utf-8">
+  					<label >&nbsp;&nbsp;&nbsp;</label>
 					<button id="startTestBtn" class="btn btn-primary" ><@spring.message "home.button.startTest"/></button>
 				</div>
-				<div id="description" class="description" style="display:none">
-					<label><@spring.message "home.descript1"/></label><br>
-					<table width=400 style="border-top:1px solid white" cellspacing=0 cellpadding=2><tr><td></td></tr></table>
-					<label><@spring.message "home.descript2"/></label><br>
-					<label><@spring.message "home.descript3"/></label><br>
-					<label><@spring.message "home.descript4"/></label>
-				</div>
-				<div id="detail" class="detail" style="display:none">
-					<div class="span3">
-						<div class="row">
-							<div class="span1">
-								<label><@spring.message "home.version"/></label><br>
-								<label><@spring.message "home.account"/></label><br>
-								<label><@spring.message "home.password"/></label><br>
-							</div>
-							<div class="span2">
-								<select class="select-item" id="version" name="version" style="width:140px" class="required">
-								</select><br>
-								<input type="text" name="account" id="account" class="span2 required" style="height:14px"/> <br>
-								<input type="text" name="password" id="Password" class="span2 required" style="height:14px"/> <br>
-							</div>
-						</div>
+				<div id="detail" class="detail">
+					<div class="span3 row">
+						    <label class="control-label" for="version"><@spring.message "home.version"/></label>
+						      	<select class="select-item span2" id="version" name="version" class="required">
+									<option value ="8.4.3">8.4.3</option>
+									<option value="8.4.1">8.4.1</option>
+									<option value="8.4.0">8.4.0</option>
+									<option value ="8.3.1">8.3.1</option>
+									<option value ="8.3.0">8.3.0</option>
+									<option value="8.2.2">8.2.2</option>
+								</select>
+						    <label class="control-label" for="testContent"><@spring.message "home.test.content"/></label>
+						      	<select class="select-item span2" id="testContent" name="testContent">
+									<option value ="select">Select</option>
+									<option value ="insert">Insert</option>
+									<option value="update">Update</option>
+									<option value="delete">Delete</option>
+								</select>
 					</div>
 					<div class="span4">
-						<label><@spring.message "home.test.content"/></label>
-						<select class="select-item" id="testContent" name="testContent">
-							<option value ="select">Select</option>
-							<option value ="insert">Insert</option>
-							<option value="update">Update</option>
-							<option value="delete">Delete</option>
-						</select><br>
+						<br>
 						<label><@spring.message "home.test.data1"/></label><br>
 						<label><@spring.message "home.test.data2"/></label><br>
 					</div>
@@ -181,101 +171,51 @@
 	</div>
 	<script>
 		$(document).ready(function(){
-			initTestType();
-			initDriver();
-			jQuery.validator.addMethod("jdbc", function(value, element) {
+			jQuery.validator.addMethod("host", function(value, element) {
 			    var length = value.length;
-			    var jdbc =  /(^jdbc:(cubrid)|(mysql)|(oracle):).+[\.\w\d]+:\d+.+$/
-			    return this.optional(element) || (jdbc.test(value));
-			}, "JDBC connection string is error.");
+			    var host =  /^((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}$|^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$|(localhost)/
+			    var result = this.optional(element) || (host.test(value));
+			    if(result){
+			    	$("#host").removeClass("error");
+			    }else{
+					$("#host").addClass("error");
+			    }
+			    return result;
+			}, "Host string is error.");
 			
-			$.validator.addMethod('url_ex',
-				    function (value) { 
-				        return /^((https?|ftp):\/\/)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
-			}, '');
-			
+			jQuery.validator.addMethod("port", function(value, element) {
+			    var length = value.length;
+			    var port =  /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
+			    var result = this.optional(element) || (port.test(value));
+			    if(result){
+			    	$("#port").removeClass("error");
+			    }else{
+					$("#port").addClass("error");
+			    }
+			    return result;
+			}, "Port is error.");
 			
 			$("#startTestBtn").click(function() {
-				if ($("#url").valid()) {
-					var urlValue = $("#url").val();
-					if (!urlValue.match("^(http|ftp|jdbc)")) {
-						$("#url").val("http://" + urlValue);
-					}
+				if ($("#host").valid() && $("#port").valid()) {
+					var urlValue = "jdbc:cubrid:" + $("#host").val() + ":" + $("#port").val() + ":" + $("#dbname").val() + ":::?charSet=" + $("#charset").val();
+					$("#url").val(urlValue);
 					$("#quickStart").submit();
 					return true;
 				}
 				return false;
 			})
-			
-	        $("#quickStart").validate({
+			$("#quickStart").validate({
 	            errorPlacement: function(error, element) {
 	            	$("div.quickStart").popover("show");
 		        }
 		    });
 		   	
-		    $("#url").change(function() {
-		    	if ($(this).valid()) {
+		    $("#host, #port").change(function() {
+		    	if ($("#host").valid() && $("#port").valid()) {
 		    		$("div.quickStart").popover("hide");
 		    	}
 		    });
-		    
-		    $("#url").blur(function() {
-		    	initDriver();
-		    });
-		    
-		    $("#httpRadio, #jdbcRadio").change(function() {
-				changeEvent();
-			});
 	    });
-		
-	    var driver = [];
-	    driver["cubrid"] = ["9.0.0", "8.4.3", "8.4.1", "8.4.0", "8.3.1", "8.3.0", "8.2.2"];
-	    driver["mysql"] = ["5.1.22", "5.1.9"];
-	    driver["oracle"] = ["11g", "10g"];
-	    function initDriver(){
-	    	var url = $("#url").val();
-		    var db = url.replace(/(^jdbc:)|(:.+$)/g, "");
-		    $("#version").empty();
-		    $("#version").append(getDirver(db));
-	    }
-	    function getDirver(db) {
-			var contents = [];
-			if(!driver[db]){
-				//alert("Do not support the database type: " + db);
-				return;
-			}
-			var ver;
-			for(ver in driver[db]){
-				contents.push("<option value='" + driver[db][ver] + "'>" + driver[db][ver] + "</option>");
-			}
-			return contents.join("\n");
-		}
-	    
-	    function changeEvent() {
-	    	initTestType();
-	    }
-	    
-	    function initTestType() {
-	    	if ($("#httpRadio").attr("checked") == "checked") {
-				$("#detail").hide();
-				$("#description").show();
-				//$("#description").toggle(500);
-				
-				$("#url").addClass("url");
-				$("#url").removeClass("jdbc");
-				
-				$("div.quickStart").attr("data-content","<@spring.message "home.tip.url.content"/>");
-			}else if ($("#jdbcRadio").attr("checked") == "checked") {
-				$("#description").hide();
-				$("#detail").show();
-				//$("#detail").toggle(500);
-				
-				$("#url").addClass("jdbc");
-				$("#url").removeClass("url"); 
-				
-				$("div.quickStart").attr("data-content","<@spring.message "home.tip.url.jdbc.content"/>");
-			}
-	    }
 	</script>
 	</body>
 </html>
