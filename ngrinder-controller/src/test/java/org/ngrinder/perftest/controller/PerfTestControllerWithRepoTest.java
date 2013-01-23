@@ -22,6 +22,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.ngrinder.home.model.QuickStartEntity;
 import org.ngrinder.perftest.service.AbstractPerfTestTransactionalTest;
 import org.ngrinder.script.repository.MockFileEntityRepsotory;
 import org.ngrinder.script.util.CompressionUtil;
@@ -62,7 +63,10 @@ public class PerfTestControllerWithRepoTest extends AbstractPerfTestTransactiona
 	@Test
 	public void testGetQuickStart() {
 		ModelMap model = new ModelMap();
-		controller.getQuickStart(getTestUser(), "http://naver.com", model);
+		QuickStartEntity qs = new QuickStartEntity();
+		qs.setUrl("http://naver.com");
+		qs.setTestType("http");
+		controller.getQuickStart(getTestUser(), qs, model);
 		assertThat(repo.findOne(getTestUser(), "naver.com/script.py", SVNRevision.HEAD), notNullValue());
 	}
 
