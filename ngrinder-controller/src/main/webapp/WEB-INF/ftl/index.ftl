@@ -63,7 +63,7 @@
   					<label>:</label>
   					<input type="text" id="account" name="account" class="input-small required span1" placeholder="user-id">
   					<label>:</label>
-  					<input type="password" id="password" name="password" class="input-small required span1" placeholder="password">
+  					<input type="password" id="password" name="password" class="input-small span1" placeholder="password">
   					<label>:</label><label>?charSet=</label>
   					<input type="text" id="charset" name="charset" class="input-small required span1" placeholder="charset" value="utf-8">
   					<label >&nbsp;&nbsp;&nbsp;</label>
@@ -173,7 +173,7 @@
 		$(document).ready(function(){
 			jQuery.validator.addMethod("host", function(value, element) {
 			    var length = value.length;
-			    var host =  /^((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}$|^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$|(localhost)/
+			    var host =  /^((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}$|^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$|^localhost$/
 			    var result = this.optional(element) || (host.test(value));
 			    if(result){
 			    	$("#host").removeClass("error");

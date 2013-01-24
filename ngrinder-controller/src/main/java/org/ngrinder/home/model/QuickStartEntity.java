@@ -317,7 +317,7 @@ public class QuickStartEntity {
 			protocolScript = new HTTPScript();
 		} else if (StringUtils.equalsIgnoreCase(testType, JDBC)) {
 			if (StringUtils.isBlank(this.url) || StringUtils.isBlank(this.account)
-					|| StringUtils.isBlank(this.password) || StringUtils.isBlank(this.password)) {
+					|| StringUtils.isBlank(this.testContent)) {
 				return;
 			}
 			protocolScript = new JDBCScript();
