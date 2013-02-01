@@ -30,10 +30,10 @@ def ensureClosed(object):
 connection = getConnection()
 statement = connection.createStatement()
  
-try: statement.execute("drop table ngrinder_insert_temp")
+try: statement.execute("drop table ngrinder_insert_test")
 except: pass
  
-statement.execute("create table ngrinder_insert_temp(test_id integer, test_number integer)")
+statement.execute("create table ngrinder_insert_test(test_id integer, test_number integer)")
  
 ensureClosed(statement)
 # ensureClosed(connection)
@@ -44,10 +44,10 @@ class TestRunner:
  
         try:
             insertStatement = connection.createStatement()
-            tmpId = random.nextInt(1024)
-            tmpNumber = random.nextInt(1024)
+            tmpId = random.nextInt(10240)
+            tmpNumber = random.nextInt(10240)
             insertStatement = test1.wrap(insertStatement)
-            insertStatement.execute("insert into ngrinder_insert_temp values(%d, %d)" % (tmpId, tmpNumber))
+            insertStatement.execute("insert into ngrinder_insert_test values(%d, %d)" % (tmpId, tmpNumber))
  
 
         finally:

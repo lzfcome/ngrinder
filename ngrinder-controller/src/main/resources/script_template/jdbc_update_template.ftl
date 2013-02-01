@@ -31,7 +31,7 @@ connection = getConnection()
 # statement = connection.createStatement()
  
 # You must ensure that the table and records already exist in the database.
-# statement.execute("create table ngrinder_update_temp(test_id integer, test_number integer)")
+# statement.execute("create table ngrinder_update_test(test_id integer, test_number integer)")
  
 # ensureClosed(statement)
 # ensureClosed(connection)
@@ -42,10 +42,10 @@ class TestRunner:
  
         try:
             updateStatement = connection.createStatement()
-            tmpId = random.nextInt(1024)
-            tmpNumber = random.nextInt(1024)
+            tmpId = random.nextInt(10240)
+            tmpNumber = random.nextInt(10240)
             updateStatement = test1.wrap(updateStatement)
-            updateStatement.execute("update ngrinder_update_temp set test_number=%d where test_id=%d" % (tmpId, tmpNumber))
+            updateStatement.execute("update ngrinder_update_test set test_number=%d where test_id=%d" % (tmpId, tmpNumber))
 
         finally:
             ensureClosed(updateStatement)

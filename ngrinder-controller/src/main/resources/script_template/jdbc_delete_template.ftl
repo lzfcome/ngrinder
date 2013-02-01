@@ -31,7 +31,7 @@ connection = getConnection()
 # statement = connection.createStatement()
  
 # You must ensure that the table and records already exist in the database.
-# statement.execute("create table ngrinder_delete_temp(test_id integer, test_number integer)")
+# statement.execute("create table ngrinder_delete_test(test_id integer, test_number integer)")
  
 # ensureClosed(statement)
 # ensureClosed(connection)
@@ -42,9 +42,9 @@ class TestRunner:
  
         try:
             deleteStatement = connection.createStatement()
-            tmpId = random.nextInt(1024)
+            tmpId = random.nextInt(10240)
             deleteStatement = test1.wrap(deleteStatement)
-            deleteStatement.execute("delete from ngrinder_delete_temp where test_id=%d" % tmpId)
+            deleteStatement.execute("delete from ngrinder_delete_test where test_id=%d" % tmpId)
 
         finally:
             ensureClosed(deleteStatement)

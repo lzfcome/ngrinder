@@ -57,13 +57,13 @@
 					<label>jdbc:cubrid:</label>
 					<input type="text" id="host" name="host" class="input-small host required span2" placeholder="host">
 					<label>:</label>
-  					<input type="text" id="port" name="port" class="input-small port required span1" placeholder="port">
+  					<input type="text" id="port" name="port" class="input-small port required span1" placeholder="port" value="33000">
   					<label>:</label>
-  					<input type="text" id="dbname" name="dbname" class="input-small required span1" placeholder="db-name">
+  					<input type="text" id="dbname" name="dbname" class="input-small required span1" placeholder="db-name" value="demodb">
   					<label>:</label>
-  					<input type="text" id="account" name="account" class="input-small required span1" placeholder="user-id">
+  					<input type="text" id="account" name="account" class="input-small required span1" placeholder="user-id" value="dba" autocomplete="off">
   					<label>:</label>
-  					<input type="password" id="password" name="password" class="input-small span1" placeholder="password">
+  					<input type="password" id="password" name="password" class="input-small span1" placeholder="password" autocomplete="off">
   					<label>:</label><label>?charSet=</label>
   					<input type="text" id="charset" name="charset" class="input-small required span1" placeholder="charset" value="utf-8">
   					<label >&nbsp;&nbsp;&nbsp;</label>
