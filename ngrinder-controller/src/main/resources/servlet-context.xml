@@ -83,5 +83,6 @@
 	<mvc:resources mapping="/js/**" location="/js/" />
 	<mvc:resources mapping="/chart/**" location="/chart/" />
 	<mvc:resources mapping="/plugins/**" location="/plugins/" />
+	<mvc:resources mapping="/db_data/**" location="/db_data/" />
 
 </beans>
