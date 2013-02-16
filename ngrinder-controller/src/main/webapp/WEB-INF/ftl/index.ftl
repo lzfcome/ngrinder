@@ -57,7 +57,7 @@
 								<select class="select-item" id="version" name="version" style="width:140px" class="required">
 								</select><br>
 								<input type="text" name="account" id="account" class="span2 required" style="height:14px" value="dba" autocomplete="off"/> <br>
-								<input type="text" name="password" id="Password" class="span2 required" style="height:14px" autocomplete="off"/> <br>
+								<input type="text" name="password" id="Password" class="span2" style="height:14px" autocomplete="off"/> <br>
 							</div>
 						</div>
 					</div>
