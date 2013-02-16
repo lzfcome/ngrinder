@@ -201,7 +201,7 @@
 	    	}
 			var contents = [];
 			if(!driver[db]){
-				alert("Do not support the database type: " + db+".\nSupported database types: CUBRID, Mysql, Postgresql.");
+				alert("Do not support the database type: " + db+".\nSupported database types: CUBRID, MySQL, PostgreSQL.");
 				return;
 			}
 			var ver;
