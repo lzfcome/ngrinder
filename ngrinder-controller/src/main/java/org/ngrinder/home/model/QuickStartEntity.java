@@ -67,6 +67,21 @@ public class QuickStartEntity {
 				return "org.gjt.mm.mysql.Driver";
 			}
 		};
+		Map<String, String> postgresql = new HashMap<String, String>() {
+			private static final long serialVersionUID = 6823406305517426140L;
+			{
+				// This is the driver supports Postgresql 7.2 or newer and
+				// requires a 1.5 or newer JVM.
+				this.put("9.2", "postgresql/postgresql-9.2-1002.jdbc4.jar");
+				this.put("9.1", "postgresql/postgresql-9.2-1002.jdbc4.jar");
+				this.put("9.0", "postgresql/postgresql-9.2-1002.jdbc4.jar");
+			}
+
+			@Override
+			public String toString() {
+				return "org.postgresql.Driver";
+			}
+		};
 		Map<String, String> oracle = new HashMap<String, String>() {
 			private static final long serialVersionUID = 6823406305517426140L;
 			{
@@ -79,8 +94,10 @@ public class QuickStartEntity {
 				return "oracle.jdbc.OracleDriver";
 			}
 		};
+
 		JDBC_VERSION.put("cubrid", cubrid);
 		JDBC_VERSION.put("mysql", mysql);
+		JDBC_VERSION.put("postgresql", postgresql);
 		JDBC_VERSION.put("oracle", oracle);
 	}
 
