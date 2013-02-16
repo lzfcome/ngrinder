@@ -153,7 +153,7 @@
 			initDriver();
 			jQuery.validator.addMethod("jdbc", function(value, element) {
 			    var length = value.length;
-			    var jdbc =  /(^jdbc:\w+:).+[\.\w\d]+:\d+.+$/
+			    var jdbc =  /(^jdbc:\w+:).+[\.\w\d]+(:\d+)?.+$/
 			    return this.optional(element) || (jdbc.test(value));
 			}, "JDBC connection string is error.");
 			
